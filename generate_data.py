@@ -5,7 +5,19 @@ import numpy as np
 import elasticsearch
 
 INDEX_NAME = "consultas"
-SINTOMAS = ["dor de cabeça", "febre", "falte de ar", "coriza", "diarreia", "dor de barriga", "dor muscular", "dor abdominal", "perda de cabelo", "tontura"]
+SINTOMAS = [
+    "dor de cabeça",
+    "febre",
+    "falte de ar",
+    "coriza",
+    "diarreia",
+    "dor de barriga",
+    "dor muscular",
+    "dor abdominal",
+    "perda de cabelo",
+    "tontura",
+]
+
 
 def get_data(samples_count=500):
     """
@@ -42,7 +54,15 @@ def load_data_into_es(es):
     """
     data = pd.read_csv("data.csv", index_col="id")
     for entry in data.itertuples():
-        ret = es.index(index=INDEX_NAME, id=entry.Index, body={"id": entry.Index, "descricao": entry.descricao, "timestamp": datetime.now()})
+        ret = es.index(
+            index=INDEX_NAME,
+            id=entry.Index,
+            body={
+                "id": entry.Index,
+                "descricao": entry.descricao,
+                "timestamp": datetime.now(),
+            },
+        )
         print(ret)
 
 
@@ -50,7 +70,7 @@ def query_es(es):
     """
     Busca um registro simples para ver se o indece esta funcionando.
     """
-    print(es.get(index=INDEX_NAME, id=77)['_source'])
+    print(es.get(index=INDEX_NAME, id=77)["_source"])
 
 
 def main():
@@ -61,6 +81,7 @@ def main():
     load_data_into_es(es)
 
     query_es(es)
+
 
 if __name__ == "__main__":
     main()
