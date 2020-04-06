@@ -8,7 +8,7 @@ INDEX_NAME = "consultas"
 SINTOMAS = [
     "dor de cabeça",
     "febre",
-    "falte de ar",
+    "falta de ar",
     "coriza",
     "diarreia",
     "dor de barriga",
@@ -16,10 +16,18 @@ SINTOMAS = [
     "dor abdominal",
     "perda de cabelo",
     "tontura",
+    "manchas na pele",
+    "inconciencia",
+    "enjoo",
+    "labirintite",
+    "incontinencia urinaria",
+    "convulsoes",
+    "dor na garganta",
+    "perda de olfato",
 ]
 
 
-def get_data(samples_count=500):
+def get_data(samples_count=50000):
     """
     Gera uma lista aleatoria de descrições de sintomes. Retona a lista com um
     id e sintomas.
@@ -44,7 +52,10 @@ def create_es_index(es):
     """
     Cria o indece "consultas" no ElasticSearch.
     """
-    es.indices.delete(index=INDEX_NAME)
+    try:
+        es.indices.delete(index=INDEX_NAME)
+    except error:
+        print("Cannot delete index")
     es.indices.create(index=INDEX_NAME, ignore=400)
 
 
@@ -70,7 +81,7 @@ def query_es(es):
     """
     Busca um registro simples para ver se o indece esta funcionando.
     """
-    print(es.get(index=INDEX_NAME, id=77)["_source"])
+    print(es.get(index=INDEX_NAME, id=5)["_source"])
 
 
 def main():
